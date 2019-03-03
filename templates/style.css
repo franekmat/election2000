@@ -1,0 +1,6 @@
+.chart {
+  width:inherit;
+  height:inherit; }
+
+path[fill='#123456'] {
+	display:none !important; }

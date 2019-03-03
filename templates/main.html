@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>Wybory Prezydenta Rzeczypospolitej Polskiej 2000</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ bootstrapstyle }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="{{ bootstrapjs }}"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+    google.charts.load('current', {'packages':['geochart']});
+	google.charts.setOnLoadCallback(drawRegionsMap);
+
+	var inputData = [
+	    ['Voivodeship'],
+  		['Lubelskie'],
+  		['Podlaskie'],
+  		['Kujawsko-Pomorskie'],
+	 	['Dolnośląskie'],
+	  	['Świętokrzyskie'],
+  		['Warmińsko-Mazurskie'],
+  		['Pomorskie'],
+  		['Lubuskie'],
+  		['Zachodniopomorskie'],
+  		['Mazowieckie'],
+  		['Opolskie'],
+  		['Łódzkie'],
+  		['Małopolskie'],
+  		['Śląskie'],
+  		['Podkarpackie'],
+  		['Wielkopolskie'],
+	];
+
+	function drawRegionsMap() {
+	    var data = google.visualization.arrayToDataTable(inputData);
+
+  		var options = {
+    		region: 'PL',
+    		resolution: 'provinces',
+    		colors: ['blue'],
+    		datalessRegionColor: '#FAFAFA',
+    		colorAxis: {minValue: 0, maxValue: 1},
+    		datalessRegionColor: '#123456'
+  		};
+
+  		var chart = new google.visualization.GeoChart(document.getElementById('map'));
+
+  		google.visualization.events.addListener(chart, 'select', function() {
+        var selection = chart.getSelection();
+        for (var i = 0; i < selection.length; i++) {
+            url = window.location.href;
+            url = url.substring(0, url.lastIndexOf('/') + 1);
+            window.location.href = url + inputData[1 + selection[i].row][0].toLowerCase() + '/index.html';
+        }
+      });
+
+  		chart.draw(data, options);
+	}
+
+	if (window.addEventListener) {
+    	window.addEventListener('resize', resize);
+	}
+	else {
+    	window.attachEvent('onresize', resize);
+	}
+    </script>
+    <script>
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+          var res = {{ res }};
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Kandydat', 'Wynik (%)'],
+            ["Grabowski Dariusz Maciej", res[0]],
+            ["Ikonowicz Piotr", {{ res[1] }}],
+            ["Kalinowski Jarosław", {{ res[2] }}],
+            ["Korwin-Mikke Janusz", {{ res[3] }}],
+            ["Krzaklewski Marian", {{ res[4] }}],
+            ["Kwaśniewski Aleksander", {{ res[5] }}],
+            ["Lepper Andrzej", {{ res[6] }}],
+            ["Łopuszański Jan", {{ res[7] }}],
+            ["Olechowski Andrzej Marian", {{ res[8] }}],
+            ["Pawłowski Bogdan", {{ res[9] }}],
+            ["Wałęsa Lech", {{ res[10] }}],
+            ["Wilecki Tadeusz Adam", {{ res[11] }}],
+        ]);
+
+        var options = {
+            pieHole: 0.25,
+            pieSliceText: 'none',
+            legend: 'none',
+            chartArea:{width:'100%',height:'100%'}
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donut_single'));
+        chart.draw(data, options);
+      }
+
+      if (window.addEventListener) {
+          window.addEventListener('resize', resize);
+      }
+      else {
+          window.attachEvent('onresize', resize);
+      }
+    </script>
+</head>
+
+<body>
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <h1>Wybory Prezydenta Rzeczypospolitej Polskiej 2000</h1>
+    <p>Wyniki oficjalne</p>
+</div>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Jesteś tutaj: </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            {% for path in paths %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path[0] }}">{{ path[1] }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>
+
+<div class="container" style="margin-top:30px">
+    <div class="row">
+        <div class="col-sm-7">
+            <h2>Zbiorcze statystyki głosowania</h2>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Liczba uprawnionych do głosowania</th>
+                    <td>{{uprawnieni}}</td>
+                </tr>
+                <tr>
+                    <th>Liczba wydanych kart do głosowania</th>
+                    <td>{{wydane}}</td>
+                </tr>
+                <tr>
+                    <th>Liczba kart wyjętych z urny</th>
+                    <td>{{oddane}}</td>
+                </tr>
+                <tr>
+                    <th>Liczba głosów ważnych</th>
+                    <td>{{wazne}}</td>
+                </tr>
+                <tr>
+                    <th>Liczba głosów nieważnych</th>
+                    <td>{{niewazne}}</td>
+                </tr>
+                <tr>
+                    <th>Frekwencja</th>
+                    <td>{{frekwencja}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <h2>Wyniki poszczególnych kandydatów</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Imię i nazwisko</th>
+                    <th>Liczba oddanych głosów</th>
+                    <th>Wynik wyborczy (%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for kandydat in kandydaci %}
+                    <tr>
+                        <td>{{ kandydat.nazwisko }}</td>
+                        <td>{{ kandydat.glosy }}</td>
+                        <td>{{ kandydat.wynik }}%</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-5">
+            <h2>Wykres kołowy</h2>
+            <br>
+            <div id="donut_single" class="chart"></div>
+            <br>
+            {% if mapa is defined %}
+                <h2>Mapa</h2>
+                <div id="map" class="chart"></div>
+            {% elif linki is defined %}
+                <h2>{{ nazwa_linki }}</h2>
+                <div class="list-group list-group-flush">
+                    {% for link in linki %}
+                        {{ link }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <p>Mateusz Frankowski 2018</p>
+</div>
+
+</body>
+</html>
